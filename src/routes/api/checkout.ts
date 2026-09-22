@@ -26,17 +26,23 @@ async function handleCheckout(request: Request) {
   const quantity = Number(body.quantity || url.searchParams.get("quantity") || 1);
   if (!getProduct(sku)) return json({ error: "Unknown product" }, 400);
   const channel = detectChannel(request, body);
-  const order = await createOrder({ sku, quantity, channel, status: "stub" });
-  const origin = url.origin;
-  const checkoutUrl = `${origin}/checkout/success?order=${order.id}&channel=${channel}`;
-  if (request.method === "GET" && !url.searchParams.get("json")) {
-    return Response.redirect(checkoutUrl, 302);
+  try {
+    const order = await createOrder({ sku, quantity, channel, status: "stub" });
+    const origin = url.origin;
+    const checkoutUrl = `${origin}/checkout/success?order=${order.id}&channel=${channel}`;
+    if (request.method === "GET" && !url.searchParams.get("json")) {
+      return Response.redirect(checkoutUrl, 302);
+    }
+    return json({
+      id: "cs_stub_" + order.id,
+      url: checkoutUrl,
+      orderId: order.id,
+      stub: true,
+      channel,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Checkout failed";
+    console.error("[checkout]", message);
+    return json({ error: "Checkout failed", detail: message }, 500);
   }
-  return json({
-    id: "cs_stub_" + order.id,
-    url: checkoutUrl,
-    orderId: order.id,
-    stub: true,
-    channel,
-  });
 }

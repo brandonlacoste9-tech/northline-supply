@@ -4,7 +4,13 @@ import { formatMoney } from "@/lib/store/catalog";
 import { listOrders } from "@/lib/store/orders";
 
 const getOrders = createServerFn({ method: "GET" }).handler(async () => {
-  return await listOrders(20);
+  try {
+    return { ok: true as const, orders: await listOrders(20), error: null as string | null };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Failed to load orders";
+    console.error("[admin]", message);
+    return { ok: false as const, orders: [] as Awaited<ReturnType<typeof listOrders>>, error: message };
+  }
 });
 
 export const Route = createFileRoute("/admin")({
@@ -13,7 +19,8 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminOrders() {
-  const orders = Route.useLoaderData();
+  const data = Route.useLoaderData();
+  const orders = data.orders;
   return (
     <main className="mx-auto min-h-screen max-w-3xl px-4 py-12">
       <Link to="/" className="text-xs uppercase tracking-[0.18em] text-muted">
@@ -24,6 +31,11 @@ function AdminOrders() {
         Each checkout writes a row. Channel is set at checkout — a ChatGPT
         click-out with ?channel=chatgpt lands as chatgpt.
       </p>
+      {data.error ? (
+        <p className="mt-4 rounded-lg border border-line bg-surface px-3 py-2 text-sm">
+          Could not load orders. {data.error}
+        </p>
+      ) : null}
       <div className="mt-8 overflow-x-auto rounded-xl border border-line">
         <table className="w-full min-w-[32rem] text-left text-sm">
           <thead className="border-b border-line bg-surface text-[11px] uppercase tracking-wider text-muted">
