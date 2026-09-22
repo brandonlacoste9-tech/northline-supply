@@ -1,0 +1,119 @@
+{
+  "ucp": {
+    "version": "2026-01-23",
+    "services": {
+      "dev.ucp.shopping": [
+        {
+          "version": "2026-01-23",
+          "spec": "https://ucp.dev/specification/overview",
+          "transport": "rest",
+          "endpoint": "/ucp/v1",
+          "schema": "https://ucp.dev/2026-01-23/services/shopping/openapi.json"
+        },
+        {
+          "version": "2026-01-23",
+          "spec": "https://ucp.dev/specification/overview",
+          "transport": "mcp",
+          "endpoint": "/api/mcp",
+          "schema": "https://ucp.dev/2026-01-23/services/shopping/mcp.json"
+        }
+      ]
+    },
+    "capabilities": {
+      "dev.ucp.shopping.checkout": [
+        {
+          "version": "2026-01-23",
+          "spec": "https://ucp.dev/specification/checkout",
+          "schema": "https://ucp.dev/2026-01-23/schemas/shopping/checkout.json"
+        }
+      ],
+      "dev.ucp.shopping.order": [
+        {
+          "version": "2026-01-23",
+          "spec": "https://ucp.dev/specification/order",
+          "schema": "https://ucp.dev/2026-01-23/schemas/shopping/order.json"
+        }
+      ]
+    },
+    "payment_handlers": {
+      "com.stripe": [
+        {
+          "id": "stripe",
+          "version": "2026-01-23",
+          "spec": "https://docs.stripe.com/agentic-commerce",
+          "schema": "https://docs.stripe.com/agentic-commerce/schema.json",
+          "config": {
+            "environment": "sandbox",
+            "checkout": "/api/checkout",
+            "acp_checkout_sessions": "/api/acp/checkout-sessions"
+          }
+        }
+      ]
+    }
+  },
+  "merchant": {
+    "name": "Northline Supply",
+    "brand": "Northline",
+    "description": "Field goods for people who still write things down. One catalog \u2014 human storefront and agent profile.",
+    "policies": {
+      "privacy": "/policies/privacy",
+      "refund": "/policies/refund",
+      "shipping": "/policies/shipping"
+    }
+  },
+  "products": [
+    {
+      "id": "field-notebook",
+      "sku": "NL-NB-01",
+      "title": "Field notebook",
+      "price": 2800,
+      "currency": "usd",
+      "display_price": "$28.00",
+      "inventory": 48,
+      "gtin": "0199999000011",
+      "brand": "Northline",
+      "checkout": "/api/checkout?sku=NL-NB-01"
+    },
+    {
+      "id": "camp-blanket",
+      "sku": "NL-BL-02",
+      "title": "Camp blanket",
+      "price": 12000,
+      "currency": "usd",
+      "display_price": "$120.00",
+      "inventory": 18,
+      "gtin": "0199999000028",
+      "brand": "Northline",
+      "checkout": "/api/checkout?sku=NL-BL-02"
+    },
+    {
+      "id": "brass-lamp",
+      "sku": "NL-LP-03",
+      "title": "Brass desk lamp",
+      "price": 8600,
+      "currency": "usd",
+      "display_price": "$86.00",
+      "inventory": 12,
+      "gtin": "0199999000035",
+      "brand": "Northline",
+      "checkout": "/api/checkout?sku=NL-LP-03"
+    },
+    {
+      "id": "canvas-tote",
+      "sku": "NL-TT-04",
+      "title": "Canvas tote",
+      "price": 4200,
+      "currency": "usd",
+      "display_price": "$42.00",
+      "inventory": 64,
+      "gtin": "0199999000042",
+      "brand": "Northline",
+      "checkout": "/api/checkout?sku=NL-TT-04"
+    }
+  ],
+  "checkout": {
+    "rest": "/api/checkout",
+    "acp": "/api/acp/checkout-sessions",
+    "mcp": "/api/mcp"
+  }
+}

@@ -1,0 +1,21 @@
+# Northline Supply — Netlify is the ship host.
+# Build still uses `npm run build`. Nitro switches to the netlify preset
+# when NETLIFY=true (set automatically on Netlify CI).
+#
+# Required site env (Site settings → Environment variables), never in git:
+#   DATABASE_URL  Postgres URI (Supabase: Project Settings → Database).
+#                 Not a management PAT (sbp_…).
+# Optional:
+#   STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET  when live payments go on.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[dev]
+  command = "npm run dev"
+  port = 8080
+  targetPort = 8080
