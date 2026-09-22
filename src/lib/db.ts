@@ -3,11 +3,11 @@ import { pendingMigrations } from "../../scripts/migration-plan.mjs";
 /** Which database backend is active. */
 export type DbSource = "neon" | "pglite";
 
-/** Runtime env — index access so Vite cannot replace this at build time. */
+/** Runtime env. Dot access so Nitro includes DATABASE_URL in the Netlify function. */
 function resolvedDatabaseUrl(): string | undefined {
   if (typeof process === "undefined") return undefined;
-  const raw = process.env["DATABASE_URL"];
-  return raw && raw.trim() ? raw : undefined;
+  const raw = process.env.DATABASE_URL;
+  return raw && raw.trim() ? raw.trim() : undefined;
 }
 
 /**

@@ -2,6 +2,9 @@ import { getSql } from "@/lib/db";
 import type { OrderChannel } from "./catalog";
 import { getProduct } from "./catalog";
 
+// Static env read so Nitro/Netlify keep DATABASE_URL on the server function.
+void process.env.DATABASE_URL;
+
 export interface StoreOrder {
   id: string;
   createdAt: string;
